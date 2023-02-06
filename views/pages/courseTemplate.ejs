@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs'); %>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header.ejs'); %></header>
+
+    <main>
+      <div class="jumbotron">
+        <h1 class='text-center'>Course Table</h1>
+
+        <table class="table table-bordered border-primary text-center">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Duration</th>
+            <th>Fees</th>
+            <th>Actions</th>
+          </tr>
+          <!-- <% results.forEach((result)=>{ %>
+          <tr>
+            <td><%= result.course_id %></td>
+            <td><%= result.course_name %></td>
+            <td><%= result.course_duration %></td>
+            <td><%= result.course_fees %></td>
+            <td>
+              <ul class="list-inline m-0">
+                <li class="list-inline-item">
+                    <button class="btn btn-success btn-sm rounded-0" type="button" title="Edit" name='edit'><i class="fa fa-edit"></i></button>
+                </li>
+                <li class="list-inline-item">
+                    <button class="btn btn-danger btn-sm rounded-0" type="button" title="Delete" name='delete'><i class="fa fa-trash"></i></button>
+                </li>
+            </ul>
+            </td>
+          </tr>
+          <% });%> -->
+
+
+          <% for(var i=0; i<results.length; i++) {%>
+            <tr>
+              <td><%= results[i].course_id %></td>
+              <td><%= results[i].course_name %></td>
+              <td><%= results[i].course_duration %></td>
+              <td><%= results[i].course_fees %></td>
+              <td>
+                
+                <ul class="list-inline m-0">
+                  <li class="list-inline-item">
+                    <button class="btn btn-success btn-sm rounded-0" type="button" title="Edit" name=`edit-<%= i %>` onclick="editClicked(this.name)"><i class="fa fa-edit"></i></button>  
+                  </li>
+                  <li class="list-inline-item">
+                    <button class="btn btn-danger btn-sm rounded-0" type="button" title="Delete" name=`delete-<%= i %>` onclick="deleteClicked(this.name)"><i class="fa fa-trash"></i></button>
+                  </li>
+                </ul>
+
+              </td>
+            </tr>
+         <% } %>
+        </table>
+      </div>
+    </main>
+
+    <footer><%- include('../partials/footer.ejs'); %></footer>
+
+
+    <script>
+      function editClicked(editName){
+        // console.log(editName);
+        let editIndex = editName.split('-');
+        editIndex = parseInt(editIndex[1]);
+        console.log(editIndex); 
+        // const userAction = async () => {
+        // const response = await fetch('http://example.com/movies.json', {
+        //   method: 'POST',
+        //   body: myBody, // string or object
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // });
+        // //redirect to course page
+        // const myJson = await response.json(); //extract JSON from the http response
+
+        // window.location.href = ``;
+        // }     
+      }
+
+      function deleteClicked(deleteName) {
+        // console.log(deleteName);
+        let deleteIndex = deleteName.split('-');
+        deleteIndex = parseInt(deleteIndex[1]);
+        console.log(deleteIndex); 
+        // const userAction = async () => {
+        // const response = await fetch('http://example.com/movies.json', {
+        //   method: 'POST',
+        //   body: myBody, // string or object
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // });
+
+        // //redirect to course page;
+        // const myJson = await response.json(); //extract JSON from the http response
+
+        // window.location.href = ``;
+        // }
+      }
+    </script>
+  </body>
+</html>
