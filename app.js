@@ -2,11 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const connection = require('./connection/mysql.connection');
 const {Router} = require('./router/router');
-
+require('dotenv').config();
 const app = express();
 
 //PORT for server
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 //set view engine of ejs
 app.set('view engine', 'ejs');
@@ -27,4 +27,4 @@ app.listen(port);
 
 
 //log for get conformed
-console.log(`Sever listening on port : http://localhost:${port}`);
+console.log(`Sever listening on port : http://localhost:${port}/app`);

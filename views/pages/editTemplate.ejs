@@ -8,13 +8,14 @@
       <!-- common header -->
       <header><%- include('../partials/header.ejs'); %></header>
 
-      <div class="container my-5">
+      <!-- <div class="container my-5"> -->
+        <div class="container my-5 col-8 border border-secondary rounded">
         
         <!-- header for container -->
-        <h2 class="text-center">Edit Course</h2>
+        <h2 class="text-center m-3">Edit Course</h2>
         
         <!-- form for edit course -->
-        <form class="row g-3" id='editForm'>
+        <form class="row g-3 col-7 m-auto" id='editForm'>
           <div class="col-12">
             <label for="courseName" class="form-label">Name :</label>
             <input
@@ -24,6 +25,7 @@
               placeholder="Course Name"
               value=<%= result[0].course_name %>
             />
+            <small class='text-secondary'>Don't Use Space For Batter Results.</small>
           </div>
           <div class="col-12">
             <label for="courseFees" class="form-label">Fees :</label>
@@ -48,13 +50,13 @@
           </div>
           <div class="col-12 d-flex justify-content-around">
             <button type="submit" class="btn btn-outline-primary col-md-2">
-              Submit
+              Update
             </button>
             <button type="reset" class="btn btn-outline-warning col-md-2">Reset</button>
           </div>
         </form>
-        <div class='d-flex justify-content-center'>
-          <button class="btn btn-outline-secondary col-md-2" onclick='backToCourse()'>Back</button>
+        <div class='d-flex justify-content-center m-3'>
+          <button class="btn btn-outline-secondary col-md-1" onclick='backToCourse()'>Back</button>
         </div>
       </div>
     </div>
@@ -63,7 +65,7 @@
     <footer><%- include('../partials/footer.ejs'); %></footer>
 
     <script>
-      console.log('its edit template!');
+      // console.log('its edit template!');
       const editForm = document.getElementById('editForm');
       editForm.addEventListener('submit',(e)=>{
 
@@ -80,7 +82,6 @@
 
         //define body for request
         const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
-        console.log(myBody);
 
         //send request to add data to database
 
@@ -92,7 +93,6 @@
               'Content-Type': 'application/json'
             }
           });
-          console.log("response:- ",response);
           //redirect to course page;
           setTimeout(() => {
             if (response.status === 200) {

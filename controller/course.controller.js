@@ -9,8 +9,6 @@ async function getTableData(req, res) {
       }
       return res.render('pages/courseTemplate.ejs', { results: result });
     });
-    
-    return res.render('pages/courseTemplate.ejs');
   } catch (error) {
     return res.status(500).send({ Message: error });
   }
@@ -41,16 +39,20 @@ async function insertCourse(req, res) {
 //function for get edit page or render page
 async function getPageWithCourseId(req, res) {
   try {
-
-    const {courseId} = req.params;
-    con.query(`SELECT * FROM course WHERE course.course_id = ${parseInt(courseId,10)};`, function (err, result, fields) {
-      if (err) {
-        return res.status(400).render('pages/errorTemplate.ejs', { err });
+    const { courseId } = req.params;
+    con.query(
+      `SELECT * FROM course WHERE course.course_id = ${parseInt(
+        courseId,
+        10
+      )};`,
+      function (err, result, fields) {
+        if (err) {
+          return res.status(400).render('pages/errorTemplate.ejs', { err });
+        }
+        // console.log(result);
+        return res.render('pages/editTemplate.ejs', { result });
       }
-      // console.log(result);
-      return res.render('pages/editTemplate.ejs', { result });
-    });
-
+    );
   } catch (error) {
     return res.status(500).send({ Error: error });
   }
@@ -60,13 +62,13 @@ async function getPageWithCourseId(req, res) {
 async function editCourseByCourseId(req, res) {
   try {
     const { name, duration, fees } = req.body;
-    const {courseId} = req.params;
+    const { courseId } = req.params;
 
     if (name && duration && fees) {
       con.query(
         `UPDATE course SET course.course_name = '${name}',course.course_duration = '${duration}',course.course_fees = ${fees} WHERE course.course_id = ${courseId};`,
         function (err, result) {
-          console.log(result);
+          // console.log(result);
           if (err) {
             return res.status(400).render('pages/errorTemplate.ejs', { err });
           }
@@ -80,9 +82,29 @@ async function editCourseByCourseId(req, res) {
   }
 }
 
+//function for render Add course page
+const getAddCoursePage = async (req, res) => {
+  try {
+    return res.status(200).render('pages/createTemplate.ejs')
+  } catch (error) {
+    return res.status(500).send({Error:error})
+  }
+};
+
 //function for delete course by index
 async function deleteCourseByCourseId(req, res) {
   try {
+    const {courseId} = req.params;
+    con.query(
+      `DELETE FROM course WHERE course.course_id = ${parseInt(courseId)};`,
+      function (err, result) {
+        if (err) {
+          return res.status(400).render('pages/errorTemplate.ejs', { err });
+        }
+      }
+    );
+
+    return res.status(200).send({Message:`Delete column with courseId :- ${courseId} Successfully!`})
   } catch (error) {
     return res.status(500).send({ Error: error });
   }
@@ -93,5 +115,6 @@ module.exports = {
   getTableData,
   editCourseByCourseId,
   deleteCourseByCourseId,
-  getPageWithCourseId
+  getPageWithCourseId,
+  getAddCoursePage
 };

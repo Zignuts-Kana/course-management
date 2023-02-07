@@ -7,40 +7,22 @@
     <header><%- include('../partials/header.ejs'); %></header>
 
     <main>
-      <div class="jumbotron">
-        <h1 class='text-center'>Course Table</h1>
+      <div class="jumbotron col-8 m-auto">
+        <div class='d-flex justify-content-around my-5'>
+          <h1 class='text-center'>Course Table</h1> 
+          <button class='btn btn-outline-primary' onclick='addCourseClicked()'>Add Course</button>
+        </div>
 
         <table class="table table-bordered border-primary text-center">
           <tr>
-            <th>#</th>
             <th>Name</th>
             <th>Duration</th>
             <th>Fees</th>
             <th>Actions</th>
           </tr>
-          <!-- <% results.forEach((result)=>{ %>
-          <tr>
-            <td><%= result.course_id %></td>
-            <td><%= result.course_name %></td>
-            <td><%= result.course_duration %></td>
-            <td><%= result.course_fees %></td>
-            <td>
-              <ul class="list-inline m-0">
-                <li class="list-inline-item">
-                    <button class="btn btn-success btn-sm rounded-0" type="button" title="Edit" name='edit'><i class="fa fa-edit"></i></button>
-                </li>
-                <li class="list-inline-item">
-                    <button class="btn btn-danger btn-sm rounded-0" type="button" title="Delete" name='delete'><i class="fa fa-trash"></i></button>
-                </li>
-            </ul>
-            </td>
-          </tr>
-          <% });%> -->
-
-
+          
           <% for(var i=0; i<results.length; i++) {%>
             <tr>
-              <td><%= results[i].course_id %></td>
               <td><%= results[i].course_name %></td>
               <td><%= results[i].course_duration %></td>
               <td><%= results[i].course_fees %></td>
@@ -66,6 +48,11 @@
 
 
     <script>
+      console.log('course is here');
+      function addCourseClicked() {
+        window.location.href = `http://localhost:3000/app/course/create`;
+      }
+
       function editClicked(editName){
         
         let editIndex = editName.split('-');
@@ -75,24 +62,31 @@
       }
 
       function deleteClicked(deleteName) {
-        // console.log(deleteName);
+
+        let isExecuted = confirm(`Are you sure to delete this course?`);
+
         let deleteIndex = deleteName.split('-');
         deleteIndex = parseInt(deleteIndex[1]);
-        console.log(deleteIndex); 
-        // const userAction = async () => {
-        // const response = await fetch('http://example.com/movies.json', {
-        //   method: 'POST',
-        //   body: myBody, // string or object
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   }
-        // });
+        console.log(deleteIndex);
+        // const myBody = {};
 
-        // //redirect to course page;
-        // const myJson = await response.json(); //extract JSON from the http response
+        async function userAction() {
+        await fetch(`http://localhost:3000/app/course/delete/${deleteIndex}`, {
+          method: 'GET',
+          // body: JSON.stringify(myBody),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
 
-        // window.location.href = ``;
-        // }
+        setTimeout(() => {
+            window.location.href = `http://localhost:3000/app/course`;
+          }, 1500);
+        }
+
+        if (isExecuted === true) {
+          userAction();
+        }
       }
     </script>
   </body>
