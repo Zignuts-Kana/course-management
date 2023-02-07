@@ -48,10 +48,10 @@
                 
                 <ul class="list-inline m-0">
                   <li class="list-inline-item">
-                    <button class="btn btn-success btn-sm rounded-0" type="button" title="Edit" name=`edit-<%= i %>` onclick="editClicked(this.name)"><i class="fa fa-edit"></i></button>  
+                    <button class="btn btn-success btn-sm rounded-0" type="button" title="Edit" name=`edit-<%= results[i].course_id %>` onclick="editClicked(this.name)"><i class="fa fa-edit"></i></button>  
                   </li>
                   <li class="list-inline-item">
-                    <button class="btn btn-danger btn-sm rounded-0" type="button" title="Delete" name=`delete-<%= i %>` onclick="deleteClicked(this.name)"><i class="fa fa-trash"></i></button>
+                    <button class="btn btn-danger btn-sm rounded-0" type="button" title="Delete" name=`delete-<%= results[i].course_id %>` onclick="deleteClicked(this.name)"><i class="fa fa-trash"></i></button>
                   </li>
                 </ul>
 
@@ -67,23 +67,11 @@
 
     <script>
       function editClicked(editName){
-        // console.log(editName);
+        
         let editIndex = editName.split('-');
         editIndex = parseInt(editIndex[1]);
-        console.log(editIndex); 
-        // const userAction = async () => {
-        // const response = await fetch('http://example.com/movies.json', {
-        //   method: 'POST',
-        //   body: myBody, // string or object
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   }
-        // });
-        // //redirect to course page
-        // const myJson = await response.json(); //extract JSON from the http response
-
-        // window.location.href = ``;
-        // }     
+        
+        window.location.href = `http://localhost:3000/app/course/edit/${editIndex}`;   
       }
 
       function deleteClicked(deleteName) {

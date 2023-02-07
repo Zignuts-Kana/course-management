@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head.ejs'); %>
+  </head>
+  <body>
+    <div class="container">
+      <!-- common header -->
+      <header><%- include('../partials/header.ejs'); %></header>
+
+      <div class="container my-5">
+        
+        <!-- header for container -->
+        <h2 class="text-center">Edit Course</h2>
+        
+        <!-- form for edit course -->
+        <form class="row g-3" id='editForm'>
+          <div class="col-12">
+            <label for="courseName" class="form-label">Name :</label>
+            <input
+              type="text"
+              class="form-control"
+              id="courseName"
+              placeholder="Course Name"
+              value=<%= result[0].course_name %>
+            />
+          </div>
+          <div class="col-12">
+            <label for="courseFees" class="form-label">Fees :</label>
+            <input
+              type="number"
+              class="form-control"
+              id="courseFees"
+              placeholder="Course Fees"
+              value=<%= result[0].course_fees %>
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="courseDuration" class="form-label">Course Duration :</label>
+            <select id="courseDuration" class="form-select">
+              <option value=<%= result[0].course_duration %>/<%= result[0].course_id %>><%= result[0].course_duration %></option>
+              <option value=`1-Month/<%= result[0].course_id %>`>1-Month</option>
+              <option value=`3-Month/<%= result[0].course_id %>`>3-Month</option>
+              <option value=`6-Month/<%= result[0].course_id %>`>6-Month</option>
+              <option value=`12-Month/<%= result[0].course_id %>`>12-Month</option>
+              <option value=`18-Month/<%= result[0].course_id %>`>18-Month</option>
+            </select>
+          </div>
+          <div class="col-12 d-flex justify-content-around">
+            <button type="submit" class="btn btn-outline-primary col-md-2">
+              Submit
+            </button>
+            <button type="reset" class="btn btn-outline-warning col-md-2">Reset</button>
+          </div>
+        </form>
+        <div class='d-flex justify-content-center'>
+          <button class="btn btn-outline-secondary col-md-2" onclick='backToCourse()'>Back</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- common footer -->
+    <footer><%- include('../partials/footer.ejs'); %></footer>
+
+    <script>
+      console.log('its edit template!');
+      const editForm = document.getElementById('editForm');
+      editForm.addEventListener('submit',(e)=>{
+
+        e.preventDefault();
+
+        //derive all variables
+        const courseName = document.getElementById('courseName').value;
+        const courseFees = document.getElementById('courseFees').value;
+        let courseDuration = document.getElementById('courseDuration');
+        courseDuration = courseDuration.value;
+        const temp = courseDuration.split('/');
+        courseDuration = temp[0];
+        const courseId = parseInt(temp[1],10);
+
+        //define body for request
+        const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
+        console.log(myBody);
+
+        //send request to add data to database
+
+        async function userAction () {
+          const response = await fetch(`http://localhost:3000/app/course/edit/${courseId}`, {
+            method: 'POST',
+            body: JSON.stringify(myBody),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log("response:- ",response);
+          //redirect to course page;
+          setTimeout(() => {
+            if (response.status === 200) {
+            window.location.href = `http://localhost:3000/app/course`;
+          }else{
+            window.location.href = `http://localhost:3000/app/course/edit/${courseId}`;
+          }
+          }, 1500);
+
+        }
+
+        userAction();
+
+      })
+
+      function backToCourse() {
+        setTimeout(() => {
+          window.location.href = `http://localhost:3000/app/course`;
+        }, 1000);
+      }
+    </script>
+  </body>
+</html>
