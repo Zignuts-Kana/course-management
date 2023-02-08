@@ -1,4 +1,4 @@
-const { con } = require('../connection/mysql.connection');
+import { con } from '../connection/mysql.connection.mjs';
 
 //get form data
 const getTableData = async (req, res) => {
@@ -110,7 +110,7 @@ const deleteCourseByCourseId = async (req, res) => {
   }
 }
 //export function
-module.exports = {
+export default {
   insertCourse,
   getTableData,
   editCourseByCourseId,

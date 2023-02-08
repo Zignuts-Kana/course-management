@@ -1,5 +1,7 @@
-const mysql = require('mysql2');
-require('dotenv').config();
+import mysql from 'mysql2';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const con = mysql.createConnection({
   host: 'localhost',
@@ -16,4 +18,4 @@ const connect = () => {
   });
 }
 
-module.exports = { connect ,con};
+export { connect ,con};

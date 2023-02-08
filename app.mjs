@@ -1,8 +1,10 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const connection = require('./connection/mysql.connection');
-const {Router} = require('./router/router');
-require('dotenv').config();
+import express from 'express';
+import bodyParser from 'body-parser';
+import {connect} from './connection/mysql.connection.mjs';
+import {Router} from './router/router.mjs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 const app = express();
 
 //PORT for server
@@ -16,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 //Run Connect function to connect server
-connection.connect();
+connect();
 
 //connect to all router file
 app.use('/app',Router);

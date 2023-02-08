@@ -2,10 +2,10 @@
   "name": "coursemanagement",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
-  "module": "true",
+  "main": "app.mjs",
+  "type": "module",
   "scripts": {
-    "start": "nodemon -r dotenv/config app.js",
+    "start": "nodemon -r dotenv/config app.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

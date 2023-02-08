@@ -77,7 +77,7 @@
         let courseDuration = document.getElementById('courseDuration');
         courseDuration = courseDuration.value;
         const temp = courseDuration.split('/');
-        courseDuration = temp[0];
+        courseDuration = temp[0].slice(1);
         const courseId = parseInt(temp[1],10);
 
         //define body for request
