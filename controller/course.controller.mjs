@@ -3,16 +3,26 @@ import { con } from '../connection/mysql.connection.mjs';
 //get form data
 const getTableData = async (req, res) => {
   try {
+    const limit = parseInt(req.query.limit) || 7 ;
+    const page = parseInt(req.query.page) || 1;
+
     con.query(`SELECT * FROM course;`, function (err, result, fields) {
       if (err) {
         return res.status(400).render('pages/errorTemplate.ejs', { err });
       }
-      return res.render('pages/courseTemplate.ejs', { results: result });
+      
+      const totalPages = Math.ceil(result.length / limit);
+      const currentPage = page
+      const nextPage = (parseInt(currentPage,10) + 1) <= totalPages ? parseInt(currentPage,10) + 1 : 0;
+      const previousPage = (parseInt(currentPage,10) - 1) < 1 ? 0 : parseInt(currentPage,10) - 1;
+      const results = result.slice(limit*(page-1),limit*page);
+
+      return res.render('pages/courseTemplate.ejs', { results,totalPages,currentPage,nextPage,previousPage ,page , limit });
     });
   } catch (error) {
     return res.status(500).send({ Message: error });
   }
-}
+};
 
 //function for insert course
 const insertCourse = async (req, res) => {
@@ -34,7 +44,7 @@ const insertCourse = async (req, res) => {
   } catch (error) {
     return res.status(500).send({ Error: error });
   }
-}
+};
 
 //function for get edit page or render page
 const getPageWithCourseId = async (req, res) => {
@@ -56,7 +66,7 @@ const getPageWithCourseId = async (req, res) => {
   } catch (error) {
     return res.status(500).send({ Error: error });
   }
-}
+};
 
 //function for edit course by index
 const editCourseByCourseId = async (req, res) => {
@@ -80,21 +90,21 @@ const editCourseByCourseId = async (req, res) => {
   } catch (error) {
     return res.status(500).send({ Error: error });
   }
-}
+};
 
 //function for render Add course page
 const getAddCoursePage = async (req, res) => {
   try {
-    return res.status(200).render('pages/createTemplate.ejs')
+    return res.status(200).render('pages/createTemplate.ejs');
   } catch (error) {
-    return res.status(500).send({Error:error})
+    return res.status(500).send({ Error: error });
   }
 };
 
 //function for delete course by index
 const deleteCourseByCourseId = async (req, res) => {
   try {
-    const {courseId} = req.params;
+    const { courseId } = req.params;
     con.query(
       `DELETE FROM course WHERE course.course_id = ${parseInt(courseId)};`,
       function (err, result) {
@@ -104,11 +114,15 @@ const deleteCourseByCourseId = async (req, res) => {
       }
     );
 
-    return res.status(200).send({Message:`Delete column with courseId :- ${courseId} Successfully!`})
+    return res
+      .status(200)
+      .send({
+        Message: `Delete column with courseId :- ${courseId} Successfully!`,
+      });
   } catch (error) {
     return res.status(500).send({ Error: error });
   }
-}
+};
 //export function
 export default {
   insertCourse,
@@ -116,5 +130,5 @@ export default {
   editCourseByCourseId,
   deleteCourseByCourseId,
   getPageWithCourseId,
-  getAddCoursePage
+  getAddCoursePage,
 };

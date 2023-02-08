@@ -15,14 +15,16 @@
 
         <table class="table table-bordered border-primary text-center">
           <tr>
+            <th>#</th>
             <th>Name</th>
             <th>Duration</th>
             <th>Fees</th>
             <th>Actions</th>
           </tr>
           
-          <% for(var i=0; i<results.length; i++) {%>
+          <% for(let i=0; i<results.length; i++) {%>
             <tr>
+              <td><%= (limit*(page-1))+(i + 1) %></td>
               <td><%= results[i].course_name %></td>
               <td><%= results[i].course_duration %></td>
               <td><%= results[i].course_fees %></td>
@@ -41,6 +43,19 @@
             </tr>
          <% } %>
         </table>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" id=page/<%- previousPage %>/<%- limit %>/<%- totalPages %>>
+              <a class="page-link" style='cursor: pointer;'>Previous</a>
+            </li>
+            <% for(let i=1;i<=totalPages;i++) {%>
+            <li class="page-item" id=page/<%= i %>/<%- limit %>/<%- totalPages %>/<%- currentPage %>><a class="page-link" style='cursor: pointer;'><%= i %></a></li>
+            <% } %>
+            <li class="page-item" id=page/<%- nextPage %>/<%- limit %>/<%- totalPages %>>
+              <a class="page-link" style='cursor: pointer;'>Next</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </main>
 
@@ -49,7 +64,53 @@
 
     <script>
       console.log('course is here');
-      function addCourseClicked() {
+
+      const pageItems = document.getElementsByClassName('page-item');
+
+          let page = pageItems[2].id;
+          page = page.split('/');
+          //currentPage , limit , totalPages
+          const currentPage = parseInt(page[4],10);
+          const limit = parseInt(page[2],10);
+          const totalPages = parseInt(page[3],10);
+          
+          const currentPageId = `page/${currentPage}/${limit}/${totalPages}/${currentPage}`;
+          
+          const currentPageButton = document.getElementById(currentPageId.toString());
+          currentPageButton.classList.add('active');
+
+          
+          if (currentPage-1 === 0) {
+            //previous desible
+            const previousPageId = `page/${currentPage-1}/${limit}/${totalPages}`;
+            const previousPageButton = document.getElementById(previousPageId.toString());
+            previousPageButton.classList.add('disabled');
+            
+          }
+
+          if ((currentPage + 1) > totalPages) {
+            //next desible
+            const nextPageId = `page/0/${limit}/${totalPages}`;
+            const nextPageButton = document.getElementById(nextPageId.toString());
+            nextPageButton.classList.add('disabled');
+          }
+
+      for (let i = 0; i < pageItems.length; i++) {
+        pageItems[i].addEventListener('click',()=>{
+          
+          let page = pageItems[i].id;
+          page = page.split('/');
+          //currentPage , limit , totalPages
+          const currentPage = parseInt(page[1],10);
+          const limit = parseInt(page[2],10);
+          // const totalPages = parseInt(page[3],10);
+
+          window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`;
+
+        }); 
+      }
+
+      const addCourseClicked = () => {
         window.location.href = `http://localhost:3000/app/course/create`;
       }
 
@@ -67,7 +128,7 @@
 
         let deleteIndex = deleteName.split('-');
         deleteIndex = parseInt(deleteIndex[1]);
-        console.log(deleteIndex);
+        // console.log(deleteIndex);
         // const myBody = {};
 
         const userAction = async () => {
