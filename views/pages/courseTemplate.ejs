@@ -53,7 +53,7 @@
         window.location.href = `http://localhost:3000/app/course/create`;
       }
 
-      function editClicked(editName){
+      const editClicked = (editName) => {
         
         let editIndex = editName.split('-');
         editIndex = parseInt(editIndex[1]);
@@ -61,7 +61,7 @@
         window.location.href = `http://localhost:3000/app/course/edit/${editIndex}`;   
       }
 
-      function deleteClicked(deleteName) {
+      const deleteClicked = (deleteName) => {
 
         let isExecuted = confirm(`Are you sure to delete this course?`);
 
@@ -70,7 +70,7 @@
         console.log(deleteIndex);
         // const myBody = {};
 
-        async function userAction() {
+        const userAction = async () => {
         await fetch(`http://localhost:3000/app/course/delete/${deleteIndex}`, {
           method: 'GET',
           // body: JSON.stringify(myBody),

@@ -85,7 +85,7 @@
 
         //send request to add data to database
 
-        async function userAction () {
+        const userAction = async () => {
           const response = await fetch(`http://localhost:3000/app/course/edit/${courseId}`, {
             method: 'POST',
             body: JSON.stringify(myBody),
@@ -108,7 +108,7 @@
 
       })
 
-      function backToCourse() {
+      const backToCourse = () => {
         setTimeout(() => {
           window.location.href = `http://localhost:3000/app/course`;
         }, 1000);

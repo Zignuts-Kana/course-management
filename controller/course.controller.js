@@ -1,7 +1,7 @@
 const { con } = require('../connection/mysql.connection');
 
 //get form data
-async function getTableData(req, res) {
+const getTableData = async (req, res) => {
   try {
     con.query(`SELECT * FROM course;`, function (err, result, fields) {
       if (err) {
@@ -15,7 +15,7 @@ async function getTableData(req, res) {
 }
 
 //function for insert course
-async function insertCourse(req, res) {
+const insertCourse = async (req, res) => {
   try {
     const { name, duration, fees } = req.body;
 
@@ -37,7 +37,7 @@ async function insertCourse(req, res) {
 }
 
 //function for get edit page or render page
-async function getPageWithCourseId(req, res) {
+const getPageWithCourseId = async (req, res) => {
   try {
     const { courseId } = req.params;
     con.query(
@@ -59,7 +59,7 @@ async function getPageWithCourseId(req, res) {
 }
 
 //function for edit course by index
-async function editCourseByCourseId(req, res) {
+const editCourseByCourseId = async (req, res) => {
   try {
     const { name, duration, fees } = req.body;
     const { courseId } = req.params;
@@ -92,7 +92,7 @@ const getAddCoursePage = async (req, res) => {
 };
 
 //function for delete course by index
-async function deleteCourseByCourseId(req, res) {
+const deleteCourseByCourseId = async (req, res) => {
   try {
     const {courseId} = req.params;
     con.query(

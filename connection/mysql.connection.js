@@ -9,7 +9,7 @@ const con = mysql.createConnection({
   password: process.env.PASSWORD,
 });
 
-function connect() {
+const connect = () => {
   con.connect(function (err) {
     if (err) throw err;
     console.log('Connected to MySQl!');
