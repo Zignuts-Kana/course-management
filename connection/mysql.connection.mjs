@@ -4,11 +4,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const con = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  database: process.env.DATABASE,
-  user: process.env.MYSQL || 'root' ,
-  password: process.env.PASSWORD,
+  host : process.env.MYSQLHOST || '15.206.7.200',
+  port: process.env.MYSQLPORT || 3310,
+  database: process.env.MYSQLDATABASE || 'kanabhaiv',
+  user: process.env.MYSQLUSER || 'kanabhaiv' ,
+  password: process.env.MYSQLPASSWORD || 'dR4cNK1jfANPB6Ds17mY',
 });
 
 const connect = () => {

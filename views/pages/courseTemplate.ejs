@@ -67,20 +67,17 @@
 
       const pageItems = document.getElementsByClassName('page-item');
 
-          let page = pageItems[2].id;
-          page = page.split('/');
-          //currentPage , limit , totalPages
-          const currentPage = parseInt(page[4],10);
-          const limit = parseInt(page[2],10);
-          const totalPages = parseInt(page[3],10);
+          const currentPage = <%- page %>;
+          const limit = <%- limit %>;
+          const totalPages = <%- totalPages %>;
           
-          const currentPageId = `page/${currentPage}/${limit}/${totalPages}/${currentPage}`;
-          
-          const currentPageButton = document.getElementById(currentPageId.toString());
-          currentPageButton.classList.add('active');
+          if (totalPages !== 0) {
+            const currentPageId = `page/${currentPage}/${limit}/${totalPages}/${currentPage}`;
+            const currentPageButton = document.getElementById(currentPageId.toString());
+            currentPageButton.classList.add('active');
+          }
 
-          
-          if (currentPage-1 === 0) {
+          if (currentPage-1 === 0 || <%= previousPage %> === 0) {
             //previous desible
             const previousPageId = `page/${currentPage-1}/${limit}/${totalPages}`;
             const previousPageButton = document.getElementById(previousPageId.toString());
@@ -88,7 +85,7 @@
             
           }
 
-          if ((currentPage + 1) > totalPages) {
+          if ((currentPage + 1) > totalPages || <%= nextPage %> === 0) {
             //next desible
             const nextPageId = `page/0/${limit}/${totalPages}`;
             const nextPageButton = document.getElementById(nextPageId.toString());
