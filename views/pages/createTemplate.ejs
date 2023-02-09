@@ -14,7 +14,7 @@
         <h2 class="text-center m-3">Add Course</h2>
         
         <!-- form for edit course -->
-        <form class="row g-3 col-7 m-auto" id='addForm'>
+        <form method='POST' class="row g-3 col-7 m-auto" id='addForm' action='/app/course/create'>
           <div class="col-12">
             <label for="courseName" class="form-label">Name :</label>
             <input
@@ -22,6 +22,7 @@
               class="form-control"
               id="courseName"
               placeholder="Course Name"
+              name='name'
               value=''
               required
             />
@@ -34,14 +35,15 @@
               class="form-control"
               id="courseFees"
               placeholder="Course Fees"
+              name='fees'
               value=''
               required
             />
           </div>
           <div class="col-md-4">
             <label for="courseDuration" class="form-label">Course Duration :</label>
-            <select id="courseDuration" class="form-select">
-              <option value="1-Month">1-Month</option>
+            <select id="courseDuration" class="form-select" name='duration'>
+              <option value="1-Month" >1-Month</option>
               <option value="3-Month">3-Month</option>
               <option value="6-Month">6-Month</option>
               <option value="12-Month">12-Month</option>
@@ -66,39 +68,39 @@
 
     <script>
       // console.log('its add template!');
-      const editForm = document.getElementById('addForm');
-      editForm.addEventListener('submit',(e)=>{
-        e.preventDefault();
+      // const editForm = document.getElementById('addForm');
+      // editForm.addEventListener('submit',(e)=>{
+      //   e.preventDefault();
 
-        const courseName = document.getElementById('courseName').value;
-        const courseFees = document.getElementById('courseFees').value;
-        let courseDuration = document.getElementById('courseDuration');
-        courseDuration = courseDuration.value;
+      //   const courseName = document.getElementById('courseName').value;
+      //   const courseFees = document.getElementById('courseFees').value;
+      //   let courseDuration = document.getElementById('courseDuration');
+      //   courseDuration = courseDuration.value;
 
-        const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
+      //   const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
 
-        const userAction = async () => {
-          const response = await fetch(`http://localhost:3000/app/course/create`, {
-            method: 'POST',
-            body: JSON.stringify(myBody),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-          console.log("response:- ",response);
-          //redirect to course page;
-          setTimeout(() => {
-            if (response.status === 200) {
-            window.location.href = `http://localhost:3000/app/course`;
-          }else{
-            window.location.href = `http://localhost:3000/app/course/create`;
-          }
-          }, 1500);
+      //   // const userAction = async () => {
+      //   //   const response = await fetch(`http://localhost:3000/app/course/create`, {
+      //   //     method: 'POST',
+      //   //     body: JSON.stringify(myBody),
+      //   //     headers: {
+      //   //       'Content-Type': 'application/json'
+      //   //     }
+      //   //   });
+      //   //   console.log("response:- ",response);
+      //   //   //redirect to course page;
+      //   //   setTimeout(() => {
+      //   //     if (response.status === 200) {
+      //   //     window.location.href = `http://localhost:3000/app/course`;
+      //   //   }else{
+      //   //     window.location.href = `http://localhost:3000/app/course/create`;
+      //   //   }
+      //   //   }, 1500);
 
-        }
+      //   // }
 
-        userAction();
-      })
+      //   // userAction();
+      // })
 
       const backToCourse = () => {
         setTimeout(() => {

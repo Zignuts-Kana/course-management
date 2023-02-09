@@ -39,7 +39,7 @@ const insertCourse = async (req, res) => {
         }
       );
 
-      return res.status(200).send({ Message: 'New Course Added Sucessfully!' });
+      return await getTableData(req,res);
     }
   } catch (error) {
     return res.status(500).send({ Error: error });
@@ -85,7 +85,7 @@ const editCourseByCourseId = async (req, res) => {
         }
       );
 
-      return res.status(200).send({ Message: 'Course Updated Sucessfully!' });
+      return await getTableData(req,res);
     }
   } catch (error) {
     return res.status(500).send({ Error: error });
@@ -113,7 +113,6 @@ const deleteCourseByCourseId = async (req, res) => {
         }
       }
     );
-
     return res
       .status(200)
       .send({

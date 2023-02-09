@@ -133,7 +133,7 @@
 
         const userAction = async () => {
         await fetch(`http://localhost:3000/app/course/delete/${deleteIndex}`, {
-          method: 'GET',
+          method: 'DELETE',
           // body: JSON.stringify(myBody),
           headers: {
             'Content-Type': 'application/json'

@@ -24,6 +24,6 @@ courseRouter.get('/edit/:courseId',courseController.getPageWithCourseId);
 courseRouter.post('/edit/:courseId',courseController.editCourseByCourseId);
 
 //route for delete course from database
-courseRouter.get('/delete/:courseId',courseController.deleteCourseByCourseId);
+courseRouter.delete('/delete/:courseId',courseController.deleteCourseByCourseId);
 
 export { courseRouter };
