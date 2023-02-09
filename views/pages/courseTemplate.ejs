@@ -15,6 +15,7 @@
 
         <table class="table table-bordered border-primary text-center">
           <tr>
+            <th>#</th>
             <th>Name</th>
             <th>Duration</th>
             <th>Fees</th>
@@ -23,6 +24,7 @@
           
           <% for(var i=0; i<results.length; i++) {%>
             <tr>
+              <td><%= i + 1 %></td>
               <td><%= results[i].course_name %></td>
               <td><%= results[i].course_duration %></td>
               <td><%= results[i].course_fees %></td>
