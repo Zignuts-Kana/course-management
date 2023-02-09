@@ -1,23 +1,42 @@
+import { query } from 'express';
 import { con } from '../connection/mysql.connection.mjs';
 
 //get form data
 const getTableData = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 7 ;
+    const limit = parseInt(req.query.limit) || 7;
     const page = parseInt(req.query.page) || 1;
+    const id = req.query && req.query.id ? req.query.id : undefined;
+    console.log('id:- ', id);
 
     con.query(`SELECT * FROM course;`, function (err, result, fields) {
       if (err) {
         return res.status(400).render('pages/errorTemplate.ejs', { err });
       }
-      
       const totalPages = Math.ceil(result.length / limit);
-      const currentPage = page
-      const nextPage = (parseInt(currentPage,10) + 1) <= totalPages ? parseInt(currentPage,10) + 1 : 0;
-      const previousPage = (parseInt(currentPage,10) - 1) < 1 ? 0 : parseInt(currentPage,10) - 1;
-      const results = result.slice(limit*(page-1),limit*page);
+      let currentPage;
+      if (id) {
+        currentPage = Math.ceil(id / limit)>totalPages ? totalPages:Math.ceil(id / limit);
+      } else {
+        currentPage = page;
+      }
+      const nextPage =
+        parseInt(currentPage, 10) + 1 <= totalPages
+          ? parseInt(currentPage, 10) + 1
+          : 0;
+      const previousPage =
+        parseInt(currentPage, 10) - 1 < 1 ? 0 : parseInt(currentPage, 10) - 1;
+      const results = result.slice(limit * (page - 1), limit * page);
 
-      return res.render('pages/courseTemplate.ejs', { results,totalPages,currentPage,nextPage,previousPage ,page , limit });
+      return res.render('pages/courseTemplate.ejs', {
+        results,
+        totalPages,
+        currentPage,
+        nextPage,
+        previousPage,
+        page,
+        limit,
+      });
     });
   } catch (error) {
     return res.status(500).send({ Message: error });
@@ -27,22 +46,40 @@ const getTableData = async (req, res) => {
 //function for insert course
 const insertCourse = async (req, res) => {
   try {
+
+     // history.back() for last page
+
+
+
+
+
+
+
+
+
+
+    console.log('here');
     const { name, duration, fees } = req.body;
+    console.log('here2');
+    let temp = req;
+    console.log(temp.query);
 
     if (name && duration && fees) {
       con.query(
         `INSERT INTO course (course_name,course_duration,course_fees) VALUES ('${name}','${duration}',${fees});`,
-        function (err, result) {
+        async function (err, result) {
           if (err) {
             return res.status(400).render('pages/errorTemplate.ejs', { err });
           }
+          // console.log(result.insertId);
+          temp.query['id'] = result.insertId;
+          console.log(temp.query);
+          return await getTableData(req, res);
         }
       );
-
-      return await getTableData(req,res);
     }
   } catch (error) {
-    return res.status(500).send({ Error: error });
+    return res.status(500).send({ Error: 'Error from insertCourse!' });
   }
 };
 
@@ -85,7 +122,7 @@ const editCourseByCourseId = async (req, res) => {
         }
       );
 
-      return await getTableData(req,res);
+      return await getTableData(req, res);
     }
   } catch (error) {
     return res.status(500).send({ Error: error });
@@ -113,11 +150,9 @@ const deleteCourseByCourseId = async (req, res) => {
         }
       }
     );
-    return res
-      .status(200)
-      .send({
-        Message: `Delete column with courseId :- ${courseId} Successfully!`,
-      });
+    return res.status(200).send({
+      Message: `Delete column with courseId :- ${courseId} Successfully!`,
+    });
   } catch (error) {
     return res.status(500).send({ Error: error });
   }
