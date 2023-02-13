@@ -45,13 +45,13 @@
         </table>
         <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-center">
-            <li class="page-item" id=page/<%- previousPage %>/<%- limit %>/<%- totalPages %>>
+            <li class="page-item" id=page/<%- previousPage %>/<%- limit %>/<%- totalPages %>/prev>
               <a class="page-link" style='cursor: pointer;'>Previous</a>
             </li>
             <% for(let i=1;i<=totalPages;i++) {%>
             <li class="page-item" id=page/<%= i %>/<%- limit %>/<%- totalPages %>/<%- currentPage %>><a class="page-link" style='cursor: pointer;'><%= i %></a></li>
             <% } %>
-            <li class="page-item" id=page/<%- nextPage %>/<%- limit %>/<%- totalPages %>>
+            <li class="page-item" id=page/<%- nextPage %>/<%- limit %>/<%- totalPages %>/next>
               <a class="page-link" style='cursor: pointer;'>Next</a>
             </li>
           </ul>
@@ -65,12 +65,21 @@
     <script>
       console.log('course is here');
 
+      localStorage.setItem("page",<%- page %>);
+      localStorage.setItem("limit",<%- limit %>);
+
       const pageItems = document.getElementsByClassName('page-item');
 
-          const currentPage = <%- page %>;
+          let currentPage = <%- page %>;
           const limit = <%- limit %>;
           const totalPages = <%- totalPages %>;
-          
+          console.log("Total Pages:- ",totalPages);
+          console.log('Current page:- ',currentPage);
+          if (currentPage > totalPages) {
+            currentPage = totalPages;
+            console.log(currentPage);
+            window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`
+          }
           if (totalPages !== 0) {
             const currentPageId = `page/${currentPage}/${limit}/${totalPages}/${currentPage}`;
             const currentPageButton = document.getElementById(currentPageId.toString());
@@ -79,7 +88,7 @@
 
           if (currentPage-1 === 0 || <%= previousPage %> === 0) {
             //previous desible
-            const previousPageId = `page/${currentPage-1}/${limit}/${totalPages}`;
+            const previousPageId = `page/${currentPage-1}/${limit}/${totalPages}/prev`;
             const previousPageButton = document.getElementById(previousPageId.toString());
             previousPageButton.classList.add('disabled');
             
@@ -87,7 +96,7 @@
 
           if ((currentPage + 1) > totalPages || <%= nextPage %> === 0) {
             //next desible
-            const nextPageId = `page/0/${limit}/${totalPages}`;
+            const nextPageId = `page/0/${limit}/${totalPages}/next`;
             const nextPageButton = document.getElementById(nextPageId.toString());
             nextPageButton.classList.add('disabled');
           }
@@ -138,7 +147,10 @@
         });
 
         setTimeout(() => {
-          location.reload();
+          //false wrong when delete row and page is empty!
+          console.log(`http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`);
+          window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`
+          // location.reload();
           }, 1500);
         }
 

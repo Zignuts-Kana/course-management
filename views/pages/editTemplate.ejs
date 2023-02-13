@@ -15,7 +15,8 @@
         <h2 class="text-center m-3">Edit Course</h2>
         
         <!-- form for edit course -->
-        <form method='POST' class="row g-3 col-7 m-auto" id='editForm' action=/app/course/edit/<%= result[0].course_id %>>
+        <!-- <form method='POST' class="row g-3 col-7 m-auto" id='editForm' action=/app/course/edit/<%= result[0].course_id %>> -->
+        <form class="row g-3 col-7 m-auto" id='editForm'>
           <div class="col-12">
             <label for="courseName" class="form-label">Name :</label>
             <input
@@ -26,7 +27,7 @@
               name='name'
               value=<%= result[0].course_name %>
             />
-            <small class='text-secondary'>Don't Use Space For Batter Results.</small>
+            <!-- <small class='text-secondary'>Don't Use Space For Batter Results.</small> -->
           </div>
           <div class="col-12">
             <label for="courseFees" class="form-label">Fees :</label>
@@ -68,51 +69,57 @@
 
     <script>
       // console.log('its edit template!');
-      // const editForm = document.getElementById('editForm');
-      // editForm.addEventListener('submit',(e)=>{
+      const editForm = document.getElementById('editForm');
 
-      //   e.preventDefault();
+      const redirectPage = localStorage.getItem('page');
+      const redirectLimit = localStorage.getItem('limit');
 
-      //   //derive all variables
-      //   const courseName = document.getElementById('courseName').value;
-      //   const courseFees = document.getElementById('courseFees').value;
-      //   let courseDuration = document.getElementById('courseDuration');
-      //   courseDuration = courseDuration.value;
-      //   const temp = courseDuration.split('/');
-      //   courseDuration = temp[0].slice(1);
-      //   const courseId = parseInt(temp[1],10);
+      editForm.addEventListener('submit',(e)=>{
 
-      //   //define body for request
-      //   const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
+        e.preventDefault();
 
-      //   //send request to add data to database
+        //derive all variables
+        const courseName = document.getElementById('courseName').value;
+        const courseFees = document.getElementById('courseFees').value;
+        let courseDuration = document.getElementById('courseDuration');
+        courseDuration = courseDuration.value;
+        const temp = courseDuration.split('/');
+        courseDuration = temp[0].slice(1);
+        const courseId = parseInt(temp[1],10);
 
-      //   const userAction = async () => {
-      //     const response = await fetch(`http://localhost:3000/app/course/edit/${courseId}`, {
-      //       method: 'POST',
-      //       body: JSON.stringify(myBody),
-      //       headers: {
-      //         'Content-Type': 'application/json'
-      //       }
-      //     });
-      //     //redirect to course page;
-      //     setTimeout(() => {
-      //       if (response.status === 200) {
-      //       window.location.href = `http://localhost:3000/app/course`;
-      //     }else{
-      //       window.location.href = `http://localhost:3000/app/course/edit/${courseId}`;
-      //     }
-      //     }, 1500);
+        //define body for request
+        const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
 
-      //   }
+        //send request to add data to database
 
-      //   userAction();
+        const userAction = async () => {
+          const response = await fetch(`http://localhost:3000/app/course/edit/${courseId}`, {
+            method: 'POST',
+            body: JSON.stringify(myBody),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          //redirect to course page;
+          setTimeout(() => {
+            if (response.status === 200) {
+            window.location.href = `http://localhost:3000/app/course?page=redirect/${redirectPage}&limit=${redirectLimit}`;
+          }else{
+            console.log(window.location.href = `http://localhost:3000/app/course/edit/${courseId}`);
+            window.location.href = `http://localhost:3000/app/course/edit/${courseId}`;
+          }
+          }, 1500);
 
-      // })
+        }
+
+        userAction();
+
+      })
 
       const backToCourse = () => {
         setTimeout(() => {
-          window.location.href = `http://localhost:3000/app/course`;
+          // window.location.href = `http://localhost:3000/app/course`;
+          history.back();
         }, 1000);
       }
     </script>

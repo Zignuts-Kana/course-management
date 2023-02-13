@@ -4,29 +4,29 @@ import { con } from '../connection/mysql.connection.mjs';
 //get form data
 const getTableData = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 7;
-    const page = parseInt(req.query.page) || 1;
-    const id = req.query && req.query.id ? req.query.id : undefined;
-    console.log('id:- ', id);
+    let limit = req.query.limit || 7;
+    let page = req.query.page || 1;
+    let redirectPage;
+    
+    if (page.includes('redirect')) {
+      page = page.replace('redirect/','');
+      redirectPage = page.replace('redirect/','');
+      console.log("redirectPage:- ",redirectPage);
+    }
 
     con.query(`SELECT * FROM course;`, function (err, result, fields) {
       if (err) {
         return res.status(400).render('pages/errorTemplate.ejs', { err });
       }
-      const totalPages = Math.ceil(result.length / limit);
-      let currentPage;
-      if (id) {
-        currentPage = Math.ceil(id / limit)>totalPages ? totalPages:Math.ceil(id / limit);
-      } else {
-        currentPage = page;
-      }
+      const totalPages = Math.ceil(result.length / parseInt(limit,10));
+      const currentPage = parseInt(redirectPage,10)<parseInt(totalPages,10) ? totalPages : parseInt(page,10);
       const nextPage =
-        parseInt(currentPage, 10) + 1 <= totalPages
-          ? parseInt(currentPage, 10) + 1
+        (parseInt(currentPage, 10) + 1) <= totalPages
+          ? (parseInt(currentPage, 10) + 1)
           : 0;
       const previousPage =
-        parseInt(currentPage, 10) - 1 < 1 ? 0 : parseInt(currentPage, 10) - 1;
-      const results = result.slice(limit * (page - 1), limit * page);
+        (parseInt(currentPage, 10) - 1) < 1 ? 0 : (parseInt(currentPage, 10) - 1);
+      const results = result.slice(limit * (currentPage - 1), limit * currentPage);
 
       return res.render('pages/courseTemplate.ejs', {
         results,
@@ -34,8 +34,8 @@ const getTableData = async (req, res) => {
         currentPage,
         nextPage,
         previousPage,
-        page,
-        limit,
+        page:parseInt(page,10) !== currentPage ? currentPage : parseInt(page,10),
+        limit:parseInt(limit,10),
       });
     });
   } catch (error) {
@@ -46,38 +46,20 @@ const getTableData = async (req, res) => {
 //function for insert course
 const insertCourse = async (req, res) => {
   try {
-
-     // history.back() for last page
-
-
-
-
-
-
-
-
-
-
-    console.log('here');
-    const { name, duration, fees } = req.body;
-    console.log('here2');
-    let temp = req;
-    console.log(temp.query);
+    let { name, duration, fees } = req.body;
 
     if (name && duration && fees) {
       con.query(
-        `INSERT INTO course (course_name,course_duration,course_fees) VALUES ('${name}','${duration}',${fees});`,
+        `INSERT INTO course (course_name,course_duration,course_fees) VALUES ('${name.replaceAll(" ", "-")}','${duration}',${Math.abs(fees)});`,
         async function (err, result) {
           if (err) {
             return res.status(400).render('pages/errorTemplate.ejs', { err });
           }
-          // console.log(result.insertId);
-          temp.query['id'] = result.insertId;
-          console.log(temp.query);
-          return await getTableData(req, res);
+          // return await getTableData(req, res);
         }
       );
     }
+    return res.status(200).send({Message:'Insert New Course Successfully!'})
   } catch (error) {
     return res.status(500).send({ Error: 'Error from insertCourse!' });
   }
@@ -113,7 +95,7 @@ const editCourseByCourseId = async (req, res) => {
 
     if (name && duration && fees) {
       con.query(
-        `UPDATE course SET course.course_name = '${name}',course.course_duration = '${duration}',course.course_fees = ${fees} WHERE course.course_id = ${courseId};`,
+        `UPDATE course SET course.course_name = '${name.replaceAll(" ", "-")}',course.course_duration = '${duration}',course.course_fees = ${Math.abs(fees)} WHERE course.course_id = ${courseId};`,
         function (err, result) {
           // console.log(result);
           if (err) {
@@ -122,7 +104,8 @@ const editCourseByCourseId = async (req, res) => {
         }
       );
 
-      return await getTableData(req, res);
+      // return await getTableData(req, res);
+      return res.status(200).send({Message:"Update Course Successfully!"})
     }
   } catch (error) {
     return res.status(500).send({ Error: error });

@@ -14,7 +14,8 @@
         <h2 class="text-center m-3">Add Course</h2>
         
         <!-- form for edit course -->
-        <form method='POST' class="row g-3 col-7 m-auto" id='addForm' action='/app/course/create'>
+        <!-- <form method='POST' class="row g-3 col-7 m-auto" id='addForm' action='/app/course/create'> -->
+        <form class="row g-3 col-7 m-auto" id='addForm'>
           <div class="col-12">
             <label for="courseName" class="form-label">Name :</label>
             <input
@@ -68,43 +69,47 @@
 
     <script>
       // console.log('its add template!');
-      // const editForm = document.getElementById('addForm');
-      // editForm.addEventListener('submit',(e)=>{
-      //   e.preventDefault();
+      const redirectPage = localStorage.getItem('page');
+      const redirectLimit = localStorage.getItem('limit');
 
-      //   const courseName = document.getElementById('courseName').value;
-      //   const courseFees = document.getElementById('courseFees').value;
-      //   let courseDuration = document.getElementById('courseDuration');
-      //   courseDuration = courseDuration.value;
+      const editForm = document.getElementById('addForm');
+      editForm.addEventListener('submit',(e)=>{
+        e.preventDefault();
 
-      //   const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
+        const courseName = document.getElementById('courseName').value;
+        const courseFees = document.getElementById('courseFees').value;
+        let courseDuration = document.getElementById('courseDuration');
+        courseDuration = courseDuration.value;
 
-      //   // const userAction = async () => {
-      //   //   const response = await fetch(`http://localhost:3000/app/course/create`, {
-      //   //     method: 'POST',
-      //   //     body: JSON.stringify(myBody),
-      //   //     headers: {
-      //   //       'Content-Type': 'application/json'
-      //   //     }
-      //   //   });
-      //   //   console.log("response:- ",response);
-      //   //   //redirect to course page;
-      //   //   setTimeout(() => {
-      //   //     if (response.status === 200) {
-      //   //     window.location.href = `http://localhost:3000/app/course`;
-      //   //   }else{
-      //   //     window.location.href = `http://localhost:3000/app/course/create`;
-      //   //   }
-      //   //   }, 1500);
+        const myBody = {"name":courseName,"duration":courseDuration,"fees":parseInt(courseFees)};
 
-      //   // }
+        const userAction = async () => {
+          const response = await fetch(`http://localhost:3000/app/course/create`, {
+            method: 'POST',
+            body: JSON.stringify(myBody),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log("response:- ",response);
+          //redirect to course page;
+          setTimeout(() => {
+            if (response.status === 200) {
+              window.location.href = `http://localhost:3000/app/course?page=redirect/${redirectPage}&limit=${redirectLimit}`;
+          }else{
+            window.location.href = `http://localhost:3000/app/course/create`;
+          }
+          }, 1500);
 
-      //   // userAction();
-      // })
+        }
+
+        userAction();
+      })
 
       const backToCourse = () => {
         setTimeout(() => {
-          window.location.href = `http://localhost:3000/app/course`;
+          // window.location.href = `http://localhost:3000/app/course`;
+          history.back();
         }, 1000);
       }
     </script>
