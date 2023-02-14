@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import {connect} from './connection/mysql.connection.mjs';
+import {Course} from "./models/course.model.mjs"
+// import {connect} from './connection/mysql.connection.mjs';
 import {Router} from './router/router.mjs';
 import dotenv from 'dotenv';
 
@@ -18,7 +19,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 //Run Connect function to connect server
-connect();
+// connect();
+
+//Run Course Model to connect Course
+Course;
 
 //connect to all router file
 app.use('/app',Router);

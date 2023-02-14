@@ -27,7 +27,7 @@
               value=''
               required
             />
-            <small class='text-secondary'>Don't Use Space For Batter Results.</small>
+            <!-- <small class='text-secondary'>Don't Use Space For Batter Results.</small> -->
           </div>
           <div class="col-12">
             <label for="courseFees" class="form-label">Fees :</label>
@@ -91,7 +91,6 @@
               'Content-Type': 'application/json'
             }
           });
-          console.log("response:- ",response);
           //redirect to course page;
           setTimeout(() => {
             if (response.status === 200) {

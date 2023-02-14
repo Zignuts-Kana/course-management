@@ -13,6 +13,8 @@
           <button class='btn btn-outline-primary' onclick='addCourseClicked()'>Add Course</button>
         </div>
 
+        <% if(results.length) {%>
+
         <table class="table table-bordered border-primary text-center">
           <tr>
             <th>#</th>
@@ -58,7 +60,9 @@
         </nav>
       </div>
     </main>
-
+<%} else { %>
+  <h3> No any course yet!</h3>
+  <% } %>
     <footer><%- include('../partials/footer.ejs'); %></footer>
 
 
@@ -73,11 +77,9 @@
           let currentPage = <%- page %>;
           const limit = <%- limit %>;
           const totalPages = <%- totalPages %>;
-          console.log("Total Pages:- ",totalPages);
-          console.log('Current page:- ',currentPage);
+
           if (currentPage > totalPages) {
             currentPage = totalPages;
-            console.log(currentPage);
             window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`
           }
           if (totalPages !== 0) {
@@ -86,7 +88,7 @@
             currentPageButton.classList.add('active');
           }
 
-          if (currentPage-1 === 0 || <%= previousPage %> === 0) {
+          if (totalPages!== 0 && (currentPage-1 === 0 || <%= previousPage %> === 0)) {
             //previous desible
             const previousPageId = `page/${currentPage-1}/${limit}/${totalPages}/prev`;
             const previousPageButton = document.getElementById(previousPageId.toString());
@@ -94,27 +96,30 @@
             
           }
 
-          if ((currentPage + 1) > totalPages || <%= nextPage %> === 0) {
+          if (totalPages !== 0 && ((currentPage + 1) > totalPages || <%= nextPage %> === 0)) {
             //next desible
             const nextPageId = `page/0/${limit}/${totalPages}/next`;
             const nextPageButton = document.getElementById(nextPageId.toString());
             nextPageButton.classList.add('disabled');
           }
 
-      for (let i = 0; i < pageItems.length; i++) {
-        pageItems[i].addEventListener('click',()=>{
-          
-          let page = pageItems[i].id;
-          page = page.split('/');
-          //currentPage , limit , totalPages
-          const currentPage = parseInt(page[1],10);
-          const limit = parseInt(page[2],10);
-          // const totalPages = parseInt(page[3],10);
+          if (pageItems.length) {
+            for (let i = 0; i < pageItems.length; i++) {
+              pageItems[i].addEventListener('click',()=>{
+                
+                let page = pageItems[i].id;
+                page = page.split('/');
+                //currentPage , limit , totalPages
+                const currentPage = parseInt(page[1],10);
+                const limit = parseInt(page[2],10);
+                // const totalPages = parseInt(page[3],10);
 
-          window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`;
+                window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`;
 
-        }); 
-      }
+              }); 
+            }
+          }
+      
 
       const addCourseClicked = () => {
         window.location.href = `http://localhost:3000/app/course/create`;
@@ -148,7 +153,6 @@
 
         setTimeout(() => {
           //false wrong when delete row and page is empty!
-          console.log(`http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`);
           window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`
           // location.reload();
           }, 1500);
