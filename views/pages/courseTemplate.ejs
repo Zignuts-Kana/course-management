@@ -113,8 +113,11 @@
                 const currentPage = parseInt(page[1],10);
                 const limit = parseInt(page[2],10);
                 // const totalPages = parseInt(page[3],10);
-
-                window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`;
+                if (currentPage === 0) {
+                  return
+                }else{
+                  window.location.href = `http://localhost:3000/app/course?page=${currentPage}&limit=${limit}`;
+                }
 
               }); 
             }
