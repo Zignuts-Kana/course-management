@@ -58,7 +58,7 @@ const insertCourse = async (req, res) => {
     let { name, duration, fees } = req.body;
 
     await insertCourseHelper({
-      course_name: name.replaceAll(" ", "-"),
+      course_name: name,
       course_fees: Math.abs(fees),
       course_duration: duration,
     });
@@ -89,7 +89,7 @@ const editCourseByCourseId = async (req, res) => {
     const { courseId } = req.params;
 
     await updateCourseHelper({
-      course_name: name.replaceAll(" ", "-"),
+      course_name: name,
       course_fees: Math.abs(fees),
       course_duration: duration,
       where: { course_id: parseInt(courseId,10) },
